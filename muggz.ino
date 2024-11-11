@@ -3,7 +3,7 @@
 
 const char* ssid = "";
 const char* password = "";
-const char* serverUrl = "https://iot-639m.onrender.com"; // Update with your server's IP address
+const char* serverUrl = "https://iot-639m.onrender.com"; 
 const char* dataEndpoint = "/data";
 const char* pumpEndpoint = "/pump";
 
@@ -14,22 +14,22 @@ const int maxSoilMoistureThreshold = 80;
 
 void setup() {
   Serial.begin(115200);
-  delay(4000); // Delay to ensure serial monitor is ready
+  delay(4000); 
 
-  connectToWiFi(); // Connect to WiFi
+  connectToWiFi(); 
 
   pinMode(pumpPin, OUTPUT);
-  digitalWrite(pumpPin, LOW); // Ensure pump is initially off
+  digitalWrite(pumpPin, LOW); 
 }
 
 void loop() {
-  int soil_moisture_raw = readSoilMoisture(); // Read raw soil moisture value
-  int soil_moisture_percentage = map(soil_moisture_raw, 4095, 0, 0, 100); // Map raw value to percentage
+  int soil_moisture_raw = readSoilMoisture(); 
+  int soil_moisture_percentage = map(soil_moisture_raw, 4095, 0, 0, 100); 
 
   Serial.print("Soil Moisture Percentage: ");
-  Serial.println(soil_moisture_percentage); // Display soil moisture percentage on Serial Monitor
+  Serial.println(soil_moisture_percentage); 
 
-  // Flag to keep track of pump state changes
+
   static int prevPumpState = LOW;
 
   if (soil_moisture_percentage < minSoilMoistureThreshold) {
@@ -50,9 +50,9 @@ void loop() {
     }
   }
 
-  sendSoilMoistureData(soil_moisture_percentage); // Send soil moisture percentage to API
+  sendSoilMoistureData(soil_moisture_percentage); 
 
-  delay(15000); // Wait for 15 seconds before sending next data
+  delay(15000); 
 }
 
 void connectToWiFi() {
@@ -70,7 +70,7 @@ void connectToWiFi() {
 void sendSoilMoistureData(int soil_moisture_percentage) {
   HTTPClient http;
 
-  String url = String(serverUrl) + dataEndpoint; // Append /data endpoint for sending soil moisture data
+  String url = String(serverUrl) + dataEndpoint; 
 
   http.begin(url);
   http.addHeader("Content-Type", "application/json");
@@ -85,7 +85,7 @@ void sendSoilMoistureData(int soil_moisture_percentage) {
     
     String payload = http.getString();
     Serial.print("Server response: ");
-    Serial.println(payload); // Print server response
+    Serial.println(payload); 
   } else {
     Serial.print("Error in HTTP POST request. HTTP Error code: ");
     Serial.println(httpResponseCode);
@@ -97,7 +97,7 @@ void sendSoilMoistureData(int soil_moisture_percentage) {
 void sendPumpStateData(bool isActive) {
   HTTPClient http;
 
-  String url = String(serverUrl) + pumpEndpoint; // Append /pump endpoint for sending pump state data
+  String url = String(serverUrl) + pumpEndpoint; 
 
   http.begin(url);
   http.addHeader("Content-Type", "application/json");
@@ -113,7 +113,7 @@ void sendPumpStateData(bool isActive) {
     
     String payload = http.getString();
     Serial.print("Server response: ");
-    Serial.println(payload); // Print server response
+    Serial.println(payload); 
   } else {
     Serial.print("Error in Pump State HTTP POST request. HTTP Error code: ");
     Serial.println(httpResponseCode);
